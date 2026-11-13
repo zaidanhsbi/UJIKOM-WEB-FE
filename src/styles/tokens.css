@@ -1,0 +1,120 @@
+:root {
+  /* ---------- COLORS ---------- */
+  --color-navy: #1E3A8A;
+  --color-primary: #1D4ED8;
+  --color-blue: #3B82F6;
+  --color-light-blue: #93C5FD;
+  --color-soft-blue: #DBEAFE;
+
+  --color-yellow: #FBBF24;
+  --color-mint: #34D399;
+  --color-coral: #FB7185;
+
+  --color-white: #FFFFFF;
+  --color-background: #F8FAFC;
+  --color-surface: #FFFFFF;
+  --color-border: #E2E8F0;
+  --color-text: #0F172A;
+  --color-text-secondary: #475569;
+  --color-text-disabled: #94A3B8;
+
+  /* ---------- SEMANTIC ---------- */
+  --color-success: var(--color-mint);
+  --color-warning: var(--color-yellow);
+  --color-error: var(--color-coral);
+  --color-info: var(--color-blue);
+
+  /* ---------- ALERT SURFACES & TEXT (Sesuai Referensi Alert Pastel) ---------- */
+  --color-alert-primary-bg: #CFE2FF;
+  --color-alert-primary-text: #084298;
+  --color-alert-secondary-bg: #E2E3E5;
+  --color-alert-secondary-text: #41464B;
+  --color-alert-success-bg: #D1E7DD;
+  --color-alert-success-text: #0F5132;
+  --color-alert-danger-bg: #F8D7DA;
+  --color-alert-danger-text: #842029;
+  --color-alert-warning-bg: #FFF3CD;
+  --color-alert-warning-text: #664D03;
+  --color-alert-info-bg: #CFF4FC;
+  --color-alert-info-text: #055160;
+
+  /* ---------- STATUS SOAL & SINKRONISASI ---------- */
+  --color-question-answered: var(--color-primary);
+  --color-question-unanswered: var(--color-soft-blue);
+  --color-question-flagged: var(--color-yellow);
+  --color-question-current: var(--color-navy);
+  --color-sync-pending: var(--color-yellow);
+  --color-sync-done: var(--color-mint);
+  --color-sync-failed: var(--color-coral);
+
+  /* ---------- TYPOGRAPHY ---------- */
+  --text-xs: 0.75rem;      /* 12px */
+  --text-sm: 0.875rem;     /* 14px */
+  --text-md: 1rem;         /* 16px - Ukuran teks isi minimal */
+  --text-lg: 1.125rem;     /* 18px */
+  --text-xl: 1.375rem;     /* 22px */
+  --text-xxl: 1.75rem;     /* 28px */
+  --text-xxxl: 2.25rem;    /* 36px */
+  --text-question: 1.125rem; /* 18px */
+
+  --font-regular: 400;
+  --font-medium: 500;
+  --font-semibold: 600;
+  --font-bold: 700;
+
+  --leading-tight: 1.2;
+  --leading-normal: 1.4;
+  --leading-relaxed: 1.6;
+
+  --font-family: 'Inter', system-ui, -apple-system, 'Segoe UI', Roboto, sans-serif;
+
+  /* ---------- SPACING (Kelipatan 4px) ---------- */
+  --space-xxs: 0.125rem;   /* 2px */
+  --space-xs: 0.25rem;     /* 4px */
+  --space-sm: 0.5rem;      /* 8px */
+  --space-md: 0.75rem;     /* 12px */
+  --space-lg: 1rem;        /* 16px */
+  --space-xl: 1.5rem;      /* 24px */
+  --space-xxl: 2rem;       /* 32px */
+  --space-xxxl: 3rem;      /* 48px */
+
+  /* ---------- CORNER RADIUS ---------- */
+  --radius-xs: 4px;
+  --radius-sm: 8px;
+  --radius-md: 12px;
+  --radius-lg: 16px;
+  --radius-xl: 24px;
+  --radius-pill: 999px;
+
+  /* ---------- SHADOW ---------- */
+  --shadow-sm: 0 1px 4px rgba(30, 58, 138, 0.08);
+  --shadow-md: 0 2px 8px rgba(30, 58, 138, 0.10);
+
+  /* ---------- SIZES & TARGET SENTUH ---------- */
+  --icon-sm: 16px;
+  --icon-md: 20px;
+  --icon-lg: 24px;
+  --icon-xl: 32px;
+  --button-height: 48px;
+  --button-height-sm: 36px;
+  --input-height: 48px;
+  --question-box: 40px;
+  --max-content-width: 960px;
+  --side-panel-width: 280px;
+  --border-width: 1px;
+  --border-width-active: 2px;
+
+  /* ---------- MOTION ---------- */
+  --duration-fast: 120ms;
+  --duration-normal: 200ms;
+  --duration-slow: 300ms;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  :root {
+    --duration-fast: 0ms;
+    --duration-normal: 0ms;
+    --duration-slow: 0ms;
+  }
+}
+
