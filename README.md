@@ -56,6 +56,7 @@ VITE_API_BASE_URL=http://127.0.0.1:8000/api
    ```powershell
    npm run dev
    ```
+   *(Jika ingin membuka Dashboard Web dari **HP fisik / perangkat lain dalam satu Wi-Fi (LAN)**, jalankan `npm run dev -- --host`, pastikan `VITE_API_BASE_URL` memakai IP Wi-Fi laptop seperti `http://192.168.1.10:8000/api`, dan jalankan backend dengan `php artisan serve --host=0.0.0.0 --port=8000`.)*
 
 ### B. Mode Online / Produksi
 1. Ubah `VITE_API_BASE_URL` di `.env` ke domain API produksi:
