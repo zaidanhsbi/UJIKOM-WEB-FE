@@ -1,4 +1,5 @@
 import { Eye, EyeOff } from 'lucide-react';
+import MathText from '../../components/ui/MathText';
 import { OPTION_KEYS, resolveImageUrl } from './questionConstants';
 
 /**
@@ -49,7 +50,7 @@ export default function QuestionPreviewPanel({
           )}
 
           <p className="text-question text-text whitespace-pre-wrap leading-relaxed">
-            {text || 'Teks pertanyaan akan tampil di sini...'}
+            <MathText text={text || 'Teks pertanyaan akan tampil di sini...'} />
           </p>
 
           {(type === 'pg' || type === 'pgk') && (
@@ -69,9 +70,10 @@ export default function QuestionPreviewPanel({
                   >
                     <div className="flex items-start gap-sm text-md text-text">
                       <span className="font-bold">{k}.</span>
-                      <span className="whitespace-pre-wrap">
-                        {options[k].text || `Pilihan ${k}`}
-                      </span>
+                      <MathText
+                        text={options[k].text || `Pilihan ${k}`}
+                        className="whitespace-pre-wrap"
+                      />
                     </div>
                     {options[k].image && (
                       <img

@@ -17,6 +17,7 @@ import AdminLayout from '../components/AdminLayout';
 import DataTable from '../components/ui/DataTable';
 import Modal from '../components/ui/Modal';
 import AlertBanner from '../components/ui/AlertBanner';
+import MathText from '../components/ui/MathText';
 import { GURU_MENUS } from '../config/navigation';
 import {
   fetchQuestionBankDetail,
@@ -125,8 +126,9 @@ export default function GuruQuestionBankDetail({
     ];
     const sampleRows = [
       ['PG', 'Ibukota negara Indonesia adalah...', 'Bandung', 'Jakarta', 'Surabaya', 'Medan', 'Makassar', 'B', 2],
+      ['PG', 'Hitung nilai dari $\\frac{x^2 - 9}{x - 3}$ untuk $x = 5$:', '6', '8', '10', '12', '14', 'B', 2],
       ['PGK', 'Pilih bilangan prima di bawah ini!', '2', '4', '5', '6', '7', 'A,C,E', 3],
-      ['BS', 'Matahari terbit dari arah timur.', '', '', '', '', '', 'B', 1],
+      ['BS', 'Nilai limit $\\lim_{x \\to 2} \\frac{x^2 - 4}{x - 2} = 4$ adalah benar.', '', '', '', '', '', 'B', 1],
       ['JD', 'Pasangkan negara dengan ibu kotanya.', 'Indonesia = Jakarta', 'Jepang = Tokyo', 'Prancis = Paris', '', '', 'SESUAI', 4],
       ['UR', 'Urutkan peristiwa sejarah dari yang paling awal.', 'Proklamasi 1945', 'KMB 1949', 'Pemilu Pertama 1955', '', '', 'URUT', 3],
     ];
@@ -369,9 +371,10 @@ export default function GuruQuestionBankDetail({
                   key: 'text',
                   header: 'Pertanyaan',
                   render: (q) => (
-                    <span className="block max-w-[380px] truncate text-text">
-                      {q.content?.text || '-'}
-                    </span>
+                    <MathText
+                      text={q.content?.text || '-'}
+                      className="block max-w-[380px] truncate text-text"
+                    />
                   ),
                 },
                 {
@@ -447,7 +450,10 @@ export default function GuruQuestionBankDetail({
                   Langkah 1: Unduh Template Resmi
                 </strong>
                 <span>
-                  Gunakan format tabel standar agar sistem mengenali soal dan kunci jawaban. Untuk soal bergambar, gunakan <strong>Template Word (.docx)</strong>.
+                  Gunakan format tabel standar agar sistem mengenali soal dan kunci jawaban.{' '}
+                  <strong className="text-navy">
+                    Catatan: Soal dengan gambar hanya mendukung format Word (.docx), tidak mendukung Excel (.xlsx).
+                  </strong>
                 </span>
                 <div className="flex flex-wrap items-center gap-sm mt-xs">
                   <button
