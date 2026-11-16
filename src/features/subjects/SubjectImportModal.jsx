@@ -1,3 +1,4 @@
+import { Download, Upload } from 'lucide-react';
 import Modal from '../../components/ui/Modal';
 import AlertBanner from '../../components/ui/AlertBanner';
 
@@ -57,6 +58,7 @@ export default function SubjectImportModal({
                   onClick={onDownloadExcelTemplate}
                   className="min-h-[36px] px-md py-xs rounded-sm border border-border bg-surface hover:bg-soft-blue text-navy text-xs font-semibold inline-flex items-center gap-xs transition-colors cursor-pointer"
                 >
+                  <Download size={14} />
                   <span>Download Template Excel (.xlsx)</span>
                 </button>
                 {typeof onDownloadWordTemplate === 'function' && (
@@ -65,6 +67,7 @@ export default function SubjectImportModal({
                     onClick={onDownloadWordTemplate}
                     className="min-h-[36px] px-md py-xs rounded-sm border border-border bg-surface hover:bg-soft-blue text-navy text-xs font-semibold inline-flex items-center gap-xs transition-colors cursor-pointer"
                   >
+                    <Download size={14} />
                     <span>Download Template Word (.docx)</span>
                   </button>
                 )}
@@ -102,6 +105,7 @@ export default function SubjectImportModal({
                   disabled={importingFile || restrictedMode}
                   className="min-h-[36px] px-lg py-xs rounded-sm bg-primary hover:bg-blue disabled:bg-text-disabled text-white text-xs font-semibold inline-flex items-center gap-xs transition-colors cursor-pointer disabled:cursor-not-allowed"
                 >
+                  <Upload size={14} />
                   <span>
                     {importingFile
                       ? 'Memproses File...'

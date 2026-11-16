@@ -11,6 +11,7 @@ import {
   Trash2,
   Download,
   Upload,
+  ChevronDown,
 } from 'lucide-react';
 import AdminLayout from '../components/AdminLayout';
 import DataTable from '../components/ui/DataTable';
@@ -46,6 +47,7 @@ export default function GuruQuestionBankDetail({
   const [loading, setLoading] = useState(true);
   const [banner, setBanner] = useState({ type: '', message: '' });
   const [importOpen, setImportOpen] = useState(false);
+  const [importDropdownOpen, setImportDropdownOpen] = useState(false);
   const [importing, setImporting] = useState(false);
   const [importErrors, setImportErrors] = useState([]);
   const [toggling, setToggling] = useState(false);
@@ -279,17 +281,58 @@ export default function GuruQuestionBankDetail({
 
                 {bank.is_owner && (
                   <>
-                    <button
-                      type="button"
-                      onClick={() => {
-                        setImportErrors([]);
-                        setImportOpen(true);
-                      }}
-                      className="min-h-[48px] px-lg bg-surface hover:bg-background border border-border text-navy font-semibold text-sm rounded-md transition-colors inline-flex items-center justify-center gap-sm cursor-pointer"
-                    >
-                      <FileSpreadsheet size={20} strokeWidth={1.5} />
-                      <span>Import Soal</span>
-                    </button>
+                    <div className="relative">
+                      <button
+                        type="button"
+                        onClick={() => setImportDropdownOpen((prev) => !prev)}
+                        className="min-h-[48px] px-lg bg-surface hover:bg-background border border-border text-navy font-semibold text-sm rounded-md transition-colors inline-flex items-center justify-center gap-sm cursor-pointer"
+                      >
+                        <Upload size={18} strokeWidth={1.8} />
+                        <span>Import Soal</span>
+                        <ChevronDown size={16} strokeWidth={2} />
+                      </button>
+
+                      {importDropdownOpen && (
+                        <div className="absolute right-0 mt-xs w-[250px] bg-surface border border-border rounded-md shadow-lg z-30 p-xs flex flex-col gap-xxs">
+                          <button
+                            type="button"
+                            onClick={() => {
+                              setImportDropdownOpen(false);
+                              setImportErrors([]);
+                              setImportOpen(true);
+                            }}
+                            className="w-full min-h-[40px] px-md py-xs rounded-sm hover:bg-soft-blue text-navy text-xs font-semibold text-left flex items-center gap-sm transition-colors cursor-pointer"
+                          >
+                            <Upload size={16} strokeWidth={2} className="text-primary shrink-0" />
+                            <span>Unggah Excel / Word (.xlsx / .docx)</span>
+                          </button>
+
+                          <button
+                            type="button"
+                            onClick={() => {
+                              setImportDropdownOpen(false);
+                              handleDownloadTemplate();
+                            }}
+                            className="w-full min-h-[40px] px-md py-xs rounded-sm hover:bg-soft-blue text-navy text-xs font-semibold text-left flex items-center gap-sm transition-colors cursor-pointer"
+                          >
+                            <Download size={16} strokeWidth={2} className="text-navy shrink-0" />
+                            <span>Download Template Excel (.xlsx)</span>
+                          </button>
+
+                          <button
+                            type="button"
+                            onClick={() => {
+                              setImportDropdownOpen(false);
+                              downloadDocxTemplate().catch((err) => setBanner({ type: 'error', message: err.message }));
+                            }}
+                            className="w-full min-h-[40px] px-md py-xs rounded-sm hover:bg-soft-blue text-navy text-xs font-semibold text-left flex items-center gap-sm transition-colors cursor-pointer"
+                          >
+                            <Download size={16} strokeWidth={2} className="text-navy shrink-0" />
+                            <span>Download Template Word (.docx)</span>
+                          </button>
+                        </div>
+                      )}
+                    </div>
 
                     <button
                       type="button"
@@ -384,70 +427,109 @@ export default function GuruQuestionBankDetail({
         ) : null}
       </div>
 
-      {/* Modal Import Excel / Word */}
+      {/* Modal Import Excel / Word (Seragam Gaya Langkah 1-2-3) */}
       <Modal
         isOpen={importOpen}
         onClose={() => setImportOpen(false)}
         title="Import Soal (Excel / Word)"
-        maxWidth="680px"
+        maxWidth="640px"
       >
         <div className="flex flex-col gap-md">
-          <div className="p-md rounded-md bg-background border border-border text-xs text-text flex flex-col gap-xs">
-            <p className="font-bold text-sm text-navy">Panduan Format & Contoh per Jenis Soal</p>
-            <ul className="list-disc pl-lg flex flex-col gap-xxs text-text-secondary">
-              <li>
-                <span className="font-semibold text-text">PG (Pilihan Ganda):</span> Isi Opsi A–E, Kunci <code className="font-mono text-text">B</code> (pilih satu: A–E).
-              </li>
-              <li>
-                <span className="font-semibold text-text">PGK (PG Kompleks):</span> Isi Opsi A–E, Kunci pisahkan koma seperti <code className="font-mono text-text">A,C,E</code>.
-              </li>
-              <li>
-                <span className="font-semibold text-text">BS (Benar / Salah):</span> Kosongkan Opsi A–E, Kunci <code className="font-mono text-text">B</code> (Benar) atau <code className="font-mono text-text">S</code> (Salah).
-              </li>
-              <li>
-                <span className="font-semibold text-text">JD (Menjodohkan):</span> Isi pasangan di Opsi A–E memakai <code className="font-mono text-text">=</code>, mis. <code className="font-mono text-text">Indonesia = Jakarta</code> (minimal 2 pasangan). Kolom Kunci isi <code className="font-mono text-text">SESUAI</code>.
-              </li>
-              <li>
-                <span className="font-semibold text-text">UR (Urutan):</span> Isi urutan yang benar secara berurutan di Opsi A–E (minimal 2 item). Kolom Kunci isi <code className="font-mono text-text">URUT</code>.
-              </li>
-              <li>
-                <span className="font-semibold text-text">Soal dengan Gambar:</span> Excel (<code className="font-mono">.xlsx</code>) hanya mendukung teks. Untuk menyertakan gambar pada soal/opsi, gunakan <span className="font-semibold text-text">Template Word (.docx)</span> lalu tempel (paste) gambar langsung di dalam sel <span className="font-semibold text-text">Teks Soal</span> atau <span className="font-semibold text-text">Opsi A–E</span>.
-              </li>
-            </ul>
-          </div>
+          {/* Petunjuk 3 Langkah Impor */}
+          <div className="p-lg rounded-md bg-background border border-border flex flex-col gap-sm text-xs text-text-secondary">
+            {/* Langkah 1 */}
+            <div className="flex items-start gap-sm">
+              <span className="w-[24px] h-[24px] rounded-pill bg-soft-blue text-navy font-bold flex items-center justify-center shrink-0">
+                1
+              </span>
+              <div className="flex-1">
+                <strong className="text-navy font-semibold block">
+                  Langkah 1: Unduh Template Resmi
+                </strong>
+                <span>
+                  Gunakan format tabel standar agar sistem mengenali soal dan kunci jawaban. Untuk soal bergambar, gunakan <strong>Template Word (.docx)</strong>.
+                </span>
+                <div className="flex flex-wrap items-center gap-sm mt-xs">
+                  <button
+                    type="button"
+                    onClick={handleDownloadTemplate}
+                    className="min-h-[36px] px-md py-xs rounded-sm border border-border bg-surface hover:bg-soft-blue text-navy text-xs font-semibold inline-flex items-center gap-xs transition-colors cursor-pointer"
+                  >
+                    <Download size={14} />
+                    <span>Download Template Excel (.xlsx)</span>
+                  </button>
+                  <button
+                    type="button"
+                    onClick={() => downloadDocxTemplate().catch((err) => setImportErrors([err.message]))}
+                    className="min-h-[36px] px-md py-xs rounded-sm border border-border bg-surface hover:bg-soft-blue text-navy text-xs font-semibold inline-flex items-center gap-xs transition-colors cursor-pointer"
+                  >
+                    <Download size={14} />
+                    <span>Download Template Word (.docx)</span>
+                  </button>
+                </div>
+              </div>
+            </div>
 
-          <div className="grid grid-cols-1 sm:grid-cols-2 gap-sm">
-            <button
-              type="button"
-              onClick={handleDownloadTemplate}
-              className="min-h-[44px] px-md rounded-md border border-primary bg-soft-blue/40 hover:bg-soft-blue text-primary text-sm font-semibold inline-flex items-center justify-center gap-xs cursor-pointer"
-            >
-              <Download size={16} />
-              <span>Template Excel (.xlsx)</span>
-            </button>
-            <button
-              type="button"
-              onClick={() => downloadDocxTemplate().catch((err) => setImportErrors([err.message]))}
-              className="min-h-[44px] px-md rounded-md border border-primary bg-soft-blue/40 hover:bg-soft-blue text-primary text-sm font-semibold inline-flex items-center justify-center gap-xs cursor-pointer"
-            >
-              <Download size={16} />
-              <span>Template Word (.docx)</span>
-            </button>
-          </div>
+            {/* Langkah 2 */}
+            <div className="flex items-start gap-sm">
+              <span className="w-[24px] h-[24px] rounded-pill bg-soft-blue text-navy font-bold flex items-center justify-center shrink-0">
+                2
+              </span>
+              <div className="flex-1">
+                <strong className="text-navy font-semibold block">
+                  Langkah 2: Isi Data Soal Sesuai Format
+                </strong>
+                <ul className="list-disc pl-md mt-xxs flex flex-col gap-xxs">
+                  <li>
+                    <strong>PG:</strong> Isi Opsi A–E, Kunci <code>B</code> (satu huruf A–E).
+                  </li>
+                  <li>
+                    <strong>PGK:</strong> Isi Opsi A–E, Kunci pisahkan koma seperti <code>A,C,E</code>.
+                  </li>
+                  <li>
+                    <strong>BS:</strong> Kosongkan Opsi A–E, Kunci <code>B</code> (Benar) atau <code>S</code> (Salah).
+                  </li>
+                  <li>
+                    <strong>JD:</strong> Isi pasangan di Opsi A–E memakai <code>=</code> (min. 2), mis. <code>Indonesia = Jakarta</code>. Kunci isi <code>SESUAI</code>.
+                  </li>
+                  <li>
+                    <strong>UR:</strong> Isi urutan benar di Opsi A–E (min. 2 item). Kunci isi <code>URUT</code>.
+                  </li>
+                  <li>
+                    <strong>Gambar:</strong> Tempel (paste) gambar langsung di sel <strong>Teks Soal</strong> atau <strong>Opsi A–E</strong> pada file Word (.docx).
+                  </li>
+                </ul>
+              </div>
+            </div>
 
-          <label className="flex flex-col items-center justify-center gap-xs p-xl rounded-md border-2 border-dashed border-border bg-background hover:border-primary cursor-pointer text-center">
-            <Upload size={24} className="text-primary" />
-            <span className="text-sm font-semibold text-text">
-              {importing ? 'Mengimpor soal...' : 'Klik untuk memilih file .xlsx atau .docx'}
-            </span>
-            <input
-              type="file"
-              accept=".xlsx,.xls,.docx"
-              disabled={importing}
-              onChange={handleImportFile}
-              className="hidden"
-            />
-          </label>
+            {/* Langkah 3 */}
+            <div className="flex items-start gap-sm">
+              <span className="w-[24px] h-[24px] rounded-pill bg-soft-blue text-navy font-bold flex items-center justify-center shrink-0">
+                3
+              </span>
+              <div className="flex-1">
+                <strong className="text-navy font-semibold block">
+                  Langkah 3: Unggah File (.xlsx / .docx)
+                </strong>
+                <span>
+                  Pilih file yang sudah diisi untuk divalidasi dan disimpan otomatis ke bank soal.
+                </span>
+                <div className="mt-xs flex flex-wrap items-center gap-sm">
+                  <label className={`min-h-[36px] px-lg py-xs rounded-sm text-white text-xs font-semibold inline-flex items-center gap-xs transition-colors ${importing ? 'bg-text-disabled cursor-not-allowed' : 'bg-primary hover:bg-blue cursor-pointer'}`}>
+                    <Upload size={14} />
+                    <span>{importing ? 'Memproses File...' : 'Pilih & Unggah File'}</span>
+                    <input
+                      type="file"
+                      accept=".xlsx,.xls,.docx"
+                      disabled={importing}
+                      onChange={handleImportFile}
+                      className="hidden"
+                    />
+                  </label>
+                </div>
+              </div>
+            </div>
+          </div>
 
           {importErrors.length > 0 && (
             <div className="p-md rounded-md bg-coral/15 border border-coral text-xs text-text flex flex-col gap-xs max-h-[140px] overflow-y-auto">
@@ -457,11 +539,11 @@ export default function GuruQuestionBankDetail({
             </div>
           )}
 
-          <div className="flex justify-end">
+          <div className="flex justify-end pt-xs">
             <button
               type="button"
               onClick={() => setImportOpen(false)}
-              className="min-h-[44px] px-xl rounded-md border border-border bg-surface text-text text-sm font-semibold cursor-pointer"
+              className="min-h-[38px] px-lg py-xs rounded-sm border border-border bg-surface hover:bg-background text-navy text-xs font-semibold cursor-pointer"
             >
               Tutup
             </button>
